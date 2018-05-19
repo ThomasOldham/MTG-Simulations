@@ -20,16 +20,12 @@ for i in range(15):
 
 #UNCOMMENT FOR NEXT CARD TYPE
 #Add 2 drops
-#for i in range(15, 60):
+#for i in range(45, 60):
 #    deck[i] = 2
     
 print(deck)
 
-#shuffle and draw 7
-r.shuffle(deck)
-hand = deck[:8]
 
-print(hand)
 #Init board/game state
 goldfish_life = 20
 turn = 0
@@ -44,6 +40,10 @@ spells_hand = 0
 spells_play = 0
 #creatures in play's power
 creature_pwr = 1
+
+#shuffle and draw 7
+r.shuffle(deck)
+hand = deck[:7]
 
 #Init Hand state
 for card in range(len(hand)):
@@ -63,6 +63,12 @@ while(goldfish_life >= 0):
         lands_hand -= 1
         lands_play += 1
         #remove land from hand#######################
+        
+    #ATTACK GOLDFISH 
+    for i in range(spells_play):
+        goldfish_life -= creature_pwr
+        
+    #MAIN PHASE 2
     if hand.contains(SPELL):
         #play a creature
         if p_goldfish:
@@ -74,9 +80,6 @@ while(goldfish_life >= 0):
         spells_hand -= 1
         spells_play += 1
         #remove creature from hand###################
-        #REPEAT PROCESS until all spells that can be played, are played!
-    #ATTACK GOLDFISH
-    for i in range(spells_play):
-        goldfish_life -= creature_pwr
-    
+        #REPEAT PROCESS until all spells that can be played, are played!    
+
 #DETERMINE ATK
