@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 limited = True
 constructed = False
 num_sims = 10000
+total_kept =[]
+total_mulled = []
 
 #Set deck size based on format
 if limited:
@@ -40,18 +42,30 @@ def keep_or_mull(deck):
 
 
 for i in range(len(deck)):
+    deck = np.zeros(40)
     hands_kept = 0
     hands_mulled = 0
     for j in range(i):
         #fill deck with lands
-        deck[i] = 1
+        deck[j] = 1
     print('For Land Count ' + str(deck.sum()) + ':')
     for i in range(num_sims):
         if(keep_or_mull(deck)):
             hands_kept += 1
         else:
             hands_mulled += 1
+    total_kept.append(hands_kept)
+    total_mulled.append(hands_mulled)
     print('Hands Kept: ' + str(hands_kept))
     print('Hands Mulled: ' + str(hands_mulled))
     
 #Plot of number of lands in deck (x) versus hands kept versus mulled (y)
+print(total_kept)
+print(total_mulled)
+x_axis = range(0, 40)
+
+plt.plot(x_axis,total_kept,  '--',x_axis, total_mulled,  'bs')
+plt.axis([0, 40, 0, 10000])
+plt.ylabel('Totals')
+plt.xlabel('Total land count')
+plt.show()
