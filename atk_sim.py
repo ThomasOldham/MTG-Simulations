@@ -1,5 +1,5 @@
 #Average Turn Kill Simulator
-#Assumes all spells are 1/1 for 1 mana (1 drops)
+#Assumes all spells are 1/1 for 1 mana (1 drops) and performs no mulligans
 
 import numpy as np
 import numpy.random as r
