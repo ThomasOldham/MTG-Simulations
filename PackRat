@@ -27,7 +27,7 @@ deck = np.zeros(40)
 #Add 1 Pack Rat
 deck[9] = PACK_RAT
 
-def sim_game(deck,SIM_MULL_LIM,MPL):
+def sim_game(deck,SIM_MULL_LIM,MPL,OPL,DPL):
     """Simulates a game using the specified deck
     Returns 1 if a Pack Rat was found by turn 5,
     returns 0 otherwise"""
@@ -36,11 +36,17 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
     #shuffle and draw 7
     r.shuffle(deck)
     hand = deck[:7]
+    if hand.sum() == PACK_RAT:
+        if VERBOSE:
+            print("Pack Rat in opener!")
+        OPL[SIM_MULL_LIM] += 1
+        return PACK_RAT
     #Mulligan logic, looking for Pack Rat
     for i in range(SIM_MULL_LIM,0,-1):
         if hand.sum() == PACK_RAT:
             if VERBOSE:
                 print("Pack Rat in opener!")
+            OPL[SIM_MULL_LIM] += 1
             return PACK_RAT
         else:
             MPL[SIM_MULL_LIM] += 1
@@ -50,6 +56,7 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
     if hand.sum() == PACK_RAT:
         if VERBOSE:
             print("Pack Rat in opener!")
+        OPL[SIM_MULL_LIM] += 1
         return PACK_RAT
     #Pack Rat not found in opener, determine if it is in top 5 of the library
     if VERBOSE:
@@ -58,7 +65,8 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
     if library.sum() == PACK_RAT:
         if VERBOSE:
             print('Pack Rat Drawn!')
-        return 1
+        DPL[SIM_MULL_LIM] += 1
+        return PACK_RAT
     else:
         if VERBOSE:
             print('Swamps only....')
@@ -67,12 +75,19 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
 #List of return values from simulations
 results = np.zeros(MULL_LIMIT)
 mulls_per_lim = np.zeros(MULL_LIMIT)
+opens_per_lim = np.zeros(MULL_LIMIT)
+draws_per_lim = np.zeros(MULL_LIMIT)
 
 #Run simulations
 for r_i in range(len(results)):
     for s in range(NUM_SIMS):                
-        results[r_i] += sim_game(deck,r_i,mulls_per_lim)
+        results[r_i] += sim_game(deck,r_i,mulls_per_lim,opens_per_lim,draws_per_lim)
+        
 print('Number of games with Pack Rat in opener + top 5')
 print(results)
 print('Number of mulligans executed per limit')
 print(mulls_per_lim)
+print('Number of openers with Pack Rat per limit')
+print(opens_per_lim)
+print('Number of draws into Pack Rat per limit')
+print(draws_per_lim)
