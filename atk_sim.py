@@ -1,5 +1,5 @@
 #Average Turn Kill Simulator
-#Assumes all spells are 1/1 for 1 mana (1 drops) and performs no mulligans
+#Assumes all spells are 1/1 for 1 mana (1 drops)
 
 import numpy as np
 import numpy.random as r
@@ -25,8 +25,7 @@ for i in range(15):
 #for i in range(45, 60):
 #    deck[i] = 2
     
-print(deck)
-
+#print(deck)
 
 #Init board/game state
 goldfish_life = 20
