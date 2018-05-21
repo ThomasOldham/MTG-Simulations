@@ -11,7 +11,6 @@ VERBOSE = False
 V_VERBOSE = False
 
 limited = False
-constructed = False
 num_sims = 10000
 total_kept =[]
 total_mulled = []
@@ -81,5 +80,6 @@ ax.bar(x_axis, total_mulled,width=0.4,color='g',align='edge')
 ax.bar(x_axis+0.4, total_kept,width=0.4,color='b',align='edge')
 ax.legend(["Mulled","Kept"])
 plt.title("Number of Lands in Deck VS Hands Kept or Mulled")
+plt.ylabel('Card count')
 plt.xlabel('Land count')
 plt.show()
