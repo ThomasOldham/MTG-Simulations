@@ -68,8 +68,7 @@ while(goldfish_life >= 0):
         #remove land from hand#######################
         
     #ATTACK GOLDFISH 
-    for i in range(spells_play):
-        goldfish_life -= creature_pwr
+    goldfish_life -= spells_play*creature_pwr
         
     #MAIN PHASE 2
     mana_available = lands_play
