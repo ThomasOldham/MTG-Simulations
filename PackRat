@@ -46,7 +46,8 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
             r.shuffle(deck)
             hand = deck[:i]
     #Pack Rat not found in opener, determine if it is in top 5 of the library
-    #print("Drawing to Pack Rat...")
+    if VERBOSE:
+        print("Drawing to Pack Rat...")
     library = deck[len(hand):]
     if library.sum() == 1:
         if VERBOSE:
