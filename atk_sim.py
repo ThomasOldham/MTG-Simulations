@@ -9,6 +9,7 @@ p_goldfish = False
 q_goldfish = False
 q_goldfish_prob = .05 #Chance quasi-goldfish has to interact
 goldfish_interactions = 0 #Number of interactions goldfish has access to
+NUM_SIMS = 10
 
 LAND = 1
 SPELL = 0
@@ -27,64 +28,83 @@ for i in range(15):
     
 #print(deck)
 
-#Init board/game state
-goldfish_life = 20
-turn = 0
+#Results array
+turn_results = np.zeros(NUM_SIMS)
 
-#lands in play
-lands_play = 0
-#lands in hand
-lands_hand = 0
-#spell count in hand
-spells_hand = 0
-#creatures in play
-spells_play = 0
-#creatures' in play power
-creature_pwr = 1
+for i in range(NUM_SIMS):
+    #Init board/game state
+    goldfish_life = 20
+    turn = 0
+    
+    #lands in play
+    lands_play = 0
+    #lands in hand
+    lands_hand = 0
+    #spell count in hand
+    spells_hand = 0
+    #creatures in play
+    spells_play = 0
+    #creatures' in play power
+    creature_pwr = 1
+    
+    #shuffle and draw 7
+    r.shuffle(deck)
+    hand = deck[:7]
+    
+    #Init Hand state
+    for card in range(len(hand)):
+        if hand[card] == 1:
+            lands_hand += 1
+        if hand[card] == 0:
+            spells_hand += 1
 
-#shuffle and draw 7
-r.shuffle(deck)
-hand = deck[:7]
-
-#Init Hand state
-for card in range(len(hand)):
-    if hand[card] == 1:
-        lands_hand += 1
-    if hand[card] == 0:
-        spells_hand += 1
-
-#Simulate goldfish kill
-while(goldfish_life >= 0):
-    turn += 1
-    #Draw card if not turn 1#########################
-    #CARD DRAW LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!!!!
-    #################################################
-    #MAIN PHASE 1
-    if lands_hand > 0:
-        #play a land
-        lands_hand -= 1
-        lands_play += 1
-        #remove land from hand#######################
-        
-    #ATTACK GOLDFISH 
-    goldfish_life -= spells_play*creature_pwr
-        
-    #MAIN PHASE 2
-    mana_available = lands_play
-    while spells_hand > 0 and mana_available > 0:
-        #play a creature
-        if p_goldfish:
-            if goldfish_interactions > 0:
-                pass
-        if q_goldfish:
-            if r.random(1) < q_goldfish_prob:
+    #Draw cursor to index what card will be drawn next
+    draw_cur = 7
+    #Simulate goldfish kill
+    while(goldfish_life >= 0):
+        turn += 1
+        #Draw card if not turn 1#########################
+        #CARD DRAW LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!!!!
+        if turn > 1:
+            card_to_draw = deck[draw_cur]
+            if card_to_draw == LAND:
+                lands_hand += 1
+            if card_to_draw == SPELL:
+                spells_hand += 1
+            draw_cur += 1
+        #################################################
+        #MAIN PHASE 1
+        if lands_hand > 0:
+            #play a land
+            lands_hand -= 1
+            lands_play += 1
+            #remove land from hand#######################
+            
+        #ATTACK GOLDFISH 
+        goldfish_life -= spells_play*creature_pwr
+            
+        #MAIN PHASE 2
+        mana_available = lands_play
+        while spells_hand > 0 and mana_available > 0:
+            #spells in hand, mana available --> play a creature
+            if p_goldfish:
                 if goldfish_interactions > 0:
                     pass
-        #GOLDFISH LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!
-        #############################################
-        spells_hand -= 1
-        spells_play += 1
-        #remove creature from hand###################
-        #REPEAT PROCESS until all spells that can be played, are played!    
-
+            if q_goldfish:
+                if r.random(1) < q_goldfish_prob:
+                    if goldfish_interactions > 0:
+                        pass
+            #GOLDFISH LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!
+            #############################################
+            spells_hand -= 1
+            spells_play += 1
+            mana_available -= 1
+            #remove creature from hand###################
+            #REPEAT PROCESS until all spells that can be played, are played!    
+    
+    #Goldfish died on turn, record result in array
+    turn_results[i] = turn
+    
 #DETERMINE ATK
+ATK = np.average(turn_results)
+print(ATK)
