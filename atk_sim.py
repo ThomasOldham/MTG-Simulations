@@ -13,6 +13,7 @@ SPELL = 0
 
 #Init deck
 deck = np.zeros(60)
+deck = deck.tolist()
 
 #Add 15 lands
 for i in range(15):
@@ -40,10 +41,14 @@ spells_hand = 0
 spells_play = 0
 #creatures in play's power
 creature_pwr = 1
+#current card position to draw from deck, to be reset to 7 if deck shuffle
+current_draw = 7
 
 #shuffle and draw 7
 r.shuffle(deck)
 hand = deck[:7]
+print(deck)
+deck = np.delete(deck, [0,1,2,3,4,5,6])
 
 #Init Hand state
 for card in range(len(hand)):
@@ -54,11 +59,21 @@ for card in range(len(hand)):
 
 #Simulate goldfish kill
 while(goldfish_life >= 0):
+    print('Before play a card' + str(hand))
     turn += 1
+    #take first card out to play
+    current_card_play = hand[0]
+    hand = np.delete(hand, 0)
     #Draw card if not turn 1#########################
     #CARD DRAW LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!!!!
+    if turn != 1:
+        hand = np.append(hand, deck[0])
+        deck = np.delete(deck, 0)
+        current_draw += 1
+        print('After' + str(hand))
     #################################################
-    if hand.contains(LAND):
+    if LAND in hand:
+        #print('Land')
         #play a land
         lands_hand -= 1
         lands_play += 1
@@ -69,7 +84,8 @@ while(goldfish_life >= 0):
         goldfish_life -= creature_pwr
         
     #MAIN PHASE 2
-    if hand.contains(SPELL):
+    if SPELL in hand:
+        #print('Spell')
         #play a creature
         if p_goldfish:
             pass
