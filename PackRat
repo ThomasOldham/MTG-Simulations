@@ -16,7 +16,7 @@
 import numpy as np
 import numpy.random as r
 
-LAND = 0
+SWAMP = 0
 PACK_RAT = 1
 MULL_LIMIT = 7
 NUM_SIMS = 10000
@@ -25,11 +25,11 @@ VERBOSE = False
 #Init deck
 deck = np.zeros(40)
 #Add 1 Pack Rat
-deck[9] = 1
+deck[9] = PACK_RAT
 
 def sim_game(deck,SIM_MULL_LIM,MPL):
     """Simulates a game using the specified deck
-    Returns 1 if a pack rat was found by turn 5,
+    Returns 1 if a Pack Rat was found by turn 5,
     returns 0 otherwise"""
     if VERBOSE:
         print('New Hand')
@@ -38,10 +38,10 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
     hand = deck[:7]
     #Mulligan logic, looking for Pack Rat
     for i in range(SIM_MULL_LIM,0,-1):
-        if hand.sum() == 1:
+        if hand.sum() == PACK_RAT:
             if VERBOSE:
                 print("Pack Rat in opener!")
-            return 1
+            return PACK_RAT
         else:
             MPL[SIM_MULL_LIM] += 1
             r.shuffle(deck)
@@ -49,8 +49,8 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
     #Pack Rat not found in opener, determine if it is in top 5 of the library
     if VERBOSE:
         print("Drawing to Pack Rat...")
-    library = deck[len(hand):]
-    if library.sum() == 1:
+    library = deck[:len(hand)+1]
+    if library.sum() == PACK_RAT:
         if VERBOSE:
             print('Pack Rat Drawn!')
         return 1
