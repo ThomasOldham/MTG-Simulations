@@ -7,13 +7,14 @@ import matplotlib.pyplot as plt
 
 p_goldfish = False
 q_goldfish = False
+q_goldfish_prob = .05 #Chance quasi-goldfish has to interact
+goldfish_interactions = 0 #Number of interactions goldfish has access to
 
 LAND = 1
 SPELL = 0
 
 #Init deck
 deck = np.zeros(60)
-deck = deck.tolist()
 
 #Add 15 lands
 for i in range(15):
@@ -39,16 +40,12 @@ lands_hand = 0
 spells_hand = 0
 #creatures in play
 spells_play = 0
-#creatures in play's power
+#creatures' in play power
 creature_pwr = 1
-#current card position to draw from deck, to be reset to 7 if deck shuffle
-current_draw = 7
 
 #shuffle and draw 7
 r.shuffle(deck)
 hand = deck[:7]
-print(deck)
-deck = np.delete(deck, [0,1,2,3,4,5,6])
 
 #Init Hand state
 for card in range(len(hand)):
@@ -59,21 +56,12 @@ for card in range(len(hand)):
 
 #Simulate goldfish kill
 while(goldfish_life >= 0):
-    print('Before play a card' + str(hand))
     turn += 1
-    #take first card out to play
-    current_card_play = hand[0]
-    hand = np.delete(hand, 0)
     #Draw card if not turn 1#########################
     #CARD DRAW LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!!!!
-    if turn != 1:
-        hand = np.append(hand, deck[0])
-        deck = np.delete(deck, 0)
-        current_draw += 1
-        print('After' + str(hand))
     #################################################
-    if LAND in hand:
-        #print('Land')
+    #MAIN PHASE 1
+    if lands_hand > 0:
         #play a land
         lands_hand -= 1
         lands_play += 1
@@ -84,13 +72,16 @@ while(goldfish_life >= 0):
         goldfish_life -= creature_pwr
         
     #MAIN PHASE 2
-    if SPELL in hand:
-        #print('Spell')
+    mana_available = lands_play
+    while spells_hand > 0 and mana_available > 0:
         #play a creature
         if p_goldfish:
-            pass
+            if goldfish_interactions > 0:
+                pass
         if q_goldfish:
-            pass
+            if r.random(1) < q_goldfish_prob:
+                if goldfish_interactions > 0:
+                    pass
         #GOLDFISH LOGIC GOES HERE!!!!!!!!!!!!!!!!!!!!
         #############################################
         spells_hand -= 1
