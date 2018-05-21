@@ -46,10 +46,15 @@ def sim_game(deck,SIM_MULL_LIM,MPL):
             MPL[SIM_MULL_LIM] += 1
             r.shuffle(deck)
             hand = deck[:i]
+    #Check for Pack Rat after final mulligan
+    if hand.sum() == PACK_RAT:
+        if VERBOSE:
+            print("Pack Rat in opener!")
+        return PACK_RAT
     #Pack Rat not found in opener, determine if it is in top 5 of the library
     if VERBOSE:
         print("Drawing to Pack Rat...")
-    library = deck[:len(hand)+1]
+    library = deck[len(hand)+1:len(hand)+6]
     if library.sum() == PACK_RAT:
         if VERBOSE:
             print('Pack Rat Drawn!')
