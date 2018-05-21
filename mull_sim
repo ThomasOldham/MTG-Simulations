@@ -6,7 +6,8 @@
 import numpy as np
 import numpy.random as r
 import matplotlib.pyplot as plt
-
+VERBOSE = False
+V_VERBOSE = False
 limited = True
 constructed = False
 num_sims = 10000
@@ -31,15 +32,16 @@ def keep_or_mull(deck):
     hand = deck[:8]
     land_count = hand.sum()
     if land_count >= 2 and land_count <= 4:
-        #print('Hand Kept')
+        if V_VERBOSE:
+            print('Hand Kept')
         return True
     else:
-        #print('Hand Mulled')
+        if V_VERBOSE:
+            print('Hand Mulled')
         return False
         
 #set number of lands for simulation
 #propose changing var names i,j to d_size, lands respectively
-
 
 for i in range(len(deck)):
     deck = np.zeros(40)
@@ -48,7 +50,8 @@ for i in range(len(deck)):
     for j in range(i):
         #fill deck with lands
         deck[j] = 1
-    print('For Land Count ' + str(deck.sum()) + ':')
+    if VERBOSE:
+        print('For Land Count ' + str(deck.sum()) + ':')
     for i in range(num_sims):
         if(keep_or_mull(deck)):
             hands_kept += 1
@@ -56,8 +59,9 @@ for i in range(len(deck)):
             hands_mulled += 1
     total_kept.append(hands_kept)
     total_mulled.append(hands_mulled)
-    print('Hands Kept: ' + str(hands_kept))
-    print('Hands Mulled: ' + str(hands_mulled))
+    if VERBOSE:
+        print('Hands Kept: ' + str(hands_kept))
+        print('Hands Mulled: ' + str(hands_mulled))
     
 #Plot of number of lands in deck (x) versus hands kept versus mulled (y)
 print(total_kept)
