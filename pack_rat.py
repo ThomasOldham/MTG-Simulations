@@ -15,6 +15,7 @@
 #------------------------------------------------------------------------------
 import numpy as np
 import numpy.random as r
+import matplotlib.pyplot as plt
 
 SWAMP = 0
 PACK_RAT = 1
@@ -91,3 +92,12 @@ print('Number of openers with Pack Rat per limit')
 print(opens_per_lim)
 print('Number of draws into Pack Rat per limit')
 print(draws_per_lim)
+
+ax = plt.gca()
+plt.title("Pack Rat Sim")
+plt.plot(results,mulls_per_lim, 'bo--')
+plt.plot(results,opens_per_lim,'r+--')
+plt.plot(results,draws_per_lim,'kv--')
+plt.xlabel("Mulligan Limits")
+plt.legend(["Mulls per limit","Openers per limit","Draws per limit"], loc = 'upper center')
+plt.show()
