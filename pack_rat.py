@@ -74,30 +74,40 @@ def sim_game(deck,SIM_MULL_LIM,MPL,OPL,DPL):
         return 0
         
 #List of return values from simulations
-results = np.zeros(MULL_LIMIT)
-mulls_per_lim = np.zeros(MULL_LIMIT)
-opens_per_lim = np.zeros(MULL_LIMIT)
-draws_per_lim = np.zeros(MULL_LIMIT)
+rat_found = np.zeros(MULL_LIMIT)
+avg_mulls = np.zeros(MULL_LIMIT)
+avg_rat_on_open = np.zeros(MULL_LIMIT)
+avg_draws = np.zeros(MULL_LIMIT)
+x_axis = range(7)
 
 #Run simulations
-for r_i in range(len(results)):
+for r_i in range(len(rat_found)):
     for s in range(NUM_SIMS):                
-        results[r_i] += sim_game(deck,r_i,mulls_per_lim,opens_per_lim,draws_per_lim)
+        rat_found[r_i] += sim_game(deck,r_i,avg_mulls,avg_rat_on_open,avg_draws)
         
 print('Number of games with Pack Rat in opener + top 5')
-print(results)
+print(rat_found)
 print('Number of mulligans executed per limit')
-print(mulls_per_lim)
+print(avg_mulls)
 print('Number of openers with Pack Rat per limit')
-print(opens_per_lim)
+print(avg_rat_on_open)
 print('Number of draws into Pack Rat per limit')
-print(draws_per_lim)
+print(avg_draws)
 
+plt.figure("Figure 1")
 ax = plt.gca()
-plt.title("Pack Rat Sim")
-plt.plot(results,mulls_per_lim, 'bo--')
-plt.plot(results,opens_per_lim,'r+--')
-plt.plot(results,draws_per_lim,'kv--')
+plt.title("Pack Rat Sim Averages for " + str(NUM_SIMS) + " Sims")
+plt.plot(x_axis,rat_found,'y*--')
+plt.plot(x_axis,avg_rat_on_open,'r+--')
+plt.plot(x_axis,avg_draws,'kv--')
+plt.ylabel("Average Count")
 plt.xlabel("Mulligan Limits")
-plt.legend(["Mulls per limit","Openers per limit","Draws per limit"], loc = 'upper center')
+plt.legend(["Rat found by turn <5","Rat found on opener","Draws till rat found"], loc = 'upper center')
+
+plt.figure("Figure 2")
+plt.title("Average Mulls per Mull limit for " + str(NUM_SIMS) + " Sims")
+plt.plot(x_axis,avg_mulls, 'bo--')
+plt.ylabel("Average Count")
+plt.xlabel("Mulligan Limits")
+
 plt.show()
