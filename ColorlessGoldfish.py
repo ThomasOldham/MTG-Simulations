@@ -2,7 +2,9 @@ import copy
 import Mana
 import numpy.random as r
 
-DEBUG = True
+DEBUG = False
+TURN_OPTIONS_DEBUG = False
+VALID_TURNS_DEBUG = True
 
 class IntSet:
     """ Hashable set of integers """
@@ -47,8 +49,7 @@ def _play_turn(state):
         mana += Mana.converted(card.manaEachTurn)
     # Get all possible turns
     possible_turns = set()
-    possible_turns.add(IntSet())
-    _turn_options(ret.hand, mana, possible_turns)
+    _turn_options(ret.hand, mana, possible_turns, IntSet(), False)
     # Get all options tied for most mana spent
     best_turn_mana = 0
     for turn in possible_turns:
@@ -57,6 +58,8 @@ def _play_turn(state):
             card = ret.hand[cardIndex]
             turn_mana += Mana.converted(card.manaCost)
         best_turn_mana = max(turn_mana, best_turn_mana)
+    if DEBUG:
+        print(len(possible_turns))
     best_turns = []
     for turn in possible_turns:
         turn_mana = 0
@@ -89,21 +92,28 @@ def _play_turn(state):
     if DEBUG:
         print(chosen_turn.contents)
     # Play turn.
+    if VALID_TURNS_DEBUG:
+        print(len(ret.hand), chosen_turn.contents)
     for cardIndex in chosen_turn.contents:
         card = ret.hand[cardIndex]
-        ret.hand.remove(card)
+        ret.hand[cardIndex] = None
         ret.board.append(card)
+    while None in ret.hand:
+        ret.hand.remove(None)
     return ret
 
-def _turn_options(hand, mana, tested_options, chosen_indices = IntSet(),
-played_land = False):
+def _turn_options(hand, mana, tested_options, chosen_indices, played_land):
+    if TURN_OPTIONS_DEBUG:
+        print(tested_options)
     if chosen_indices in tested_options:
         return
     tested_options.add(chosen_indices)
+    if TURN_OPTIONS_DEBUG:
+        print(tested_options)
     for i in range(len(hand)):
         card = hand[i]
         if (i not in chosen_indices.contents) and \
-        Mana.converted(card.manaCost) < mana and \
+        Mana.converted(card.manaCost) <= mana and \
         ((not played_land) or not card.land):
             new_chosen_indices = copy.deepcopy(chosen_indices)
             new_chosen_indices.contents.add(i)
@@ -111,7 +121,8 @@ played_land = False):
             Mana.converted(card.manaFirstTurn)
             if not card.pseudoETBT:
                 new_mana += Mana.converted(card.manaEachTurn)
-            _turn_options(hand, new_mana, new_chosen_indices, tested_options)
+            _turn_options(hand, new_mana, tested_options,
+            new_chosen_indices, played_land)
 
 def simulation(deck, hand_size = 7, num_turns = 5):
     """ Runs a simulated game using the given deck, hand size (default 7), and

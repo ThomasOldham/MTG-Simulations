@@ -102,4 +102,5 @@ max_hand_size = 7):
     return averages
 
 def hand_performance_picture(test_results):
+    """ Not implemented. """
     pass
