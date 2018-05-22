@@ -1,7 +1,10 @@
 import numpy.random as r
 
 class Deck:
-    cards = []
+    cards = None
+    
+    def __init__(self):
+        self.cards = []
     
     def draw(self):
         return self.cards.pop()

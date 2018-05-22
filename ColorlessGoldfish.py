@@ -2,6 +2,8 @@ import copy
 import Mana
 import numpy.random as r
 
+DEBUG = True
+
 class IntSet:
     """ Hashable set of integers """
     contents = set()
@@ -25,12 +27,14 @@ class IntSet:
 
 class SimState:
     deck = None
-    hand = []
-    board = []
+    hand = None
+    board = None
     goldfish_life = None
     
     def __init__(self, deck, goldfish_life = 20):
         self.deck = deck
+        self.hand = []
+        self.board = []
         self.goldfish_life = goldfish_life
 
 def _play_turn(state):
@@ -82,11 +86,13 @@ def _play_turn(state):
     # Among tied options, choose at random
     chosen_turn = best_mana_increase_turns[
     r.randint(len(best_mana_increase_turns))]
+    if DEBUG:
+        print(chosen_turn.contents)
     # Play turn.
     for cardIndex in chosen_turn.contents:
         card = ret.hand[cardIndex]
         ret.hand.remove(card)
-        ret.board += card
+        ret.board.append(card)
     return ret
 
 def _turn_options(hand, mana, tested_options, chosen_indices = IntSet(),
@@ -107,9 +113,9 @@ played_land = False):
                 new_mana += Mana.converted(card.manaEachTurn)
             _turn_options(hand, new_mana, new_chosen_indices, tested_options)
 
-def simulation(deck, hand_size = 7, num_turns = 20):
+def simulation(deck, hand_size = 7, num_turns = 5):
     """ Runs a simulated game using the given deck, hand size (default 7), and
-        max number of turns (default 20)
+        max number of turns (default 5)
     """
     state = SimState(deck)
     states = [state]
