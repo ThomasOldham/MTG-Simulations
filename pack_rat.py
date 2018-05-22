@@ -1,11 +1,11 @@
-#Owen Turtenwald Pack Rat Retrospective
-#Simulates the case of PT2015 limited deck played by O. Turtenwald
-#Determines the ideal mulligan limit with a changeable variable
-#representing the number of times to mull. The question is if there 
-#is any benefit to ceasing mulligans before going down to 2 cards in the 
-#opening hand in order to increase the chances of drawing the Pack Rat by 
-#the 5th turn (relevant for casting and activation cost). Runs a set of 
-#10,000 sims for each limit and assumes the play (no draw for 1st turn)
+# Owen Turtenwald Pack Rat Retrospective
+# Simulates the case of PT2015 limited deck played by O. Turtenwald
+# Determines the ideal mulligan limit with a changeable variable
+# representing the number of times to mull. The question is if there 
+# is any benefit to ceasing mulligans before going down to 2 cards in the 
+# opening hand in order to increase the chances of drawing the Pack Rat by 
+# the 5th turn (relevant for casting and activation cost). Runs a set of 
+# 10,000 sims for each limit and assumes the play (no draw for 1st turn)
 #==============================================================================
 # Owen's deck consisted of 1 Pack Rat and 39 swamps.
 # Pack Rat - 1B, */*
