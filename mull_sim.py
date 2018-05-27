@@ -1,11 +1,12 @@
-#Mulligan Simulator
-#Simulates drawing opening hands and makes a mulligan decision based on 
-#land counts in opening hands
-#Uses binary arrays to represent lands as 1, spells as 0
-
+#==============================================================================
+# Mulligan Simulator
+# Simulates drawing opening hands and makes a mulligan decision based on 
+# land counts in opening hands.
+#==============================================================================
 import numpy as np
-import numpy.random as r
 import matplotlib.pyplot as plt
+import Deck as Dk
+import Card as Cd
 
 VERBOSE = False
 V_VERBOSE = False
@@ -22,17 +23,20 @@ if limited:
 else:
     deck_length = 60
     
-def keep_or_mull(deck):
-    """Shuffles the deck order and draws an opening 7 cards.
-    Keepable hand is defined as having land count between 2 and 4 cards.
+def keep_or_mull(hand):
+    """ Keepable hand is defined as having land count between 2 and 4 cards.
     
     Returns bool representing mulligan decision:
         True: hand satisfiess criteria
-        False: hand fails criteria"""
+        False: hand fails criteria
+    """
+    land_count = 0
     
-    r.shuffle(deck)
-    hand = deck[:8]
-    land_count = hand.sum()
+    #count land cards
+    for i in range(len(hand)):
+        if hand[i].land == True:
+            land_count += 1
+            
     if land_count >= 2 and land_count <= 4:
         if V_VERBOSE:
             print('Hand Kept')
@@ -41,23 +45,39 @@ def keep_or_mull(deck):
         if V_VERBOSE:
             print('Hand Mulled')
         return False
+    
+def mull_sim_single(deck):
+    """Shuffles the deck order and draws an opening 7 cards.
+    Keepable hand is defined as having land count between 2 and 4 cards.
+    
+    Returns bool representing mulligan decision:
+        True: hand satisfiess criteria
+        False: hand fails criteria"""
+    
+    deck.shuffle()
+    hand = deck.peep(8)    
+    
+    return keep_or_mull(hand)
         
 #Set number of lands for simulation
-#propose changing var names i,j to d_size, lands respectively
 for land_count in range(deck_length):
-    deck = np.zeros(deck_length)
+    deck = Dk.Deck()
     hands_kept = 0
     hands_mulled = 0
     
     for i in range(land_count):
-        #fill deck with lands
-        deck[i] = 1
+        #fill deck with white land cards
+        deck.add_card(Cd.Card(land=True, manaEachTurn = 'W'))
+        
+    for i in range(deck_length - land_count):
+        #fill deck with generic non-land cards
+        deck.add_card(Cd.Card(land=False))
         
     if VERBOSE:
         print('For Land Count ' + land_count + ':')
         
     for i in range(num_sims):
-        if(keep_or_mull(deck)):
+        if(mull_sim_single(deck)):
             hands_kept += 1
         else:
             hands_mulled += 1
@@ -68,6 +88,8 @@ for land_count in range(deck_length):
     if VERBOSE:
         print('Hands Kept: ' + str(hands_kept))
         print('Hands Mulled: ' + str(hands_mulled))
+        
+    deck.clear()
     
 #Plot of number of lands in deck (x) versus hands kept versus mulled (y)
 if VERBOSE:
