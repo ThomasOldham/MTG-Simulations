@@ -18,6 +18,7 @@ import numpy.random as r
 import deck as Dk
 import card as Cd
 import mana as Mana
+import mull_sim as Mull
 import copy
 
 p_goldfish = False        #Set to true to enable psuedo-goldfish behavior
@@ -50,9 +51,16 @@ def cal_kill_turn(deck):
     #creatures' in play power
     #creature_pwr = 1
     
-    #shuffle and draw 7
-    deck.shuffle()
-    hand = deck.draw_hand()
+    #shuffle and draw 7 cards, mulls if hand bad
+    hand = None
+    keep_hand = False
+    hand_count = 8
+    while keep_hand == False:
+        hand_count = hand_count - 1
+        deck.shuffle()
+        hand = deck.peep(hand_count)
+        keep_hand = Mull.keep_or_mull(hand)
+    hand = deck.draw_hand(num = hand_count)        
         
     #Init Hand state
     for card in hand:

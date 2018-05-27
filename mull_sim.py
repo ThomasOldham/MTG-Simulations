@@ -24,8 +24,8 @@ else:
     deck_length = 60
     
 def keep_or_mull(hand):
-    """ Keepable hand is defined as having land count between 2 and 4 cards.
-    
+    """ Keepable hand is defined as having land count between 2 and 4 cards. 
+    Hands are not mulled to less than 5 
     Returns bool representing mulligan decision:
         True: hand satisfiess criteria
         False: hand fails criteria
@@ -37,7 +37,7 @@ def keep_or_mull(hand):
         if hand[i].is_land == True:
             land_count += 1
             
-    if land_count >= 2 and land_count <= 4:
+    if (land_count >= 2 and land_count <= 4) or len(hand) <= 4:
         if V_VERBOSE:
             print('Hand Kept')
         return True

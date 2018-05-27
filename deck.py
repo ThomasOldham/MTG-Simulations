@@ -7,16 +7,16 @@ class Deck:
     def __init__(self):
         self.cards = []
     
-    def draw_hand(self):
+    def draw_hand(self, num = 7):
         """ Draws and returns the top 7 cards in the deck. Cards are removed 
         from the deck
         """
         hand = []
-        for i in range(8):
+        for i in range(num):
             hand.append(self.draw())
         return hand
         
-    def peep(self,num):
+    def peep(self,num = 7):
         """ Looks at the first 'num' cards at the top of the deck. The cards are 
         not removed from the deck
         """
