@@ -20,10 +20,10 @@ class Deck:
         """ Looks at the first 'num' cards at the top of the deck. The cards are 
         not removed from the deck
         """
-        return self.cards[:num]
+        return self.cards[-num:]
         
     def draw(self):
-        """ Draws a single card from the deck
+        """ Draws a single card from the top of the deck
         """
         return self.cards.pop()
     
@@ -40,6 +40,9 @@ class Deck:
         """ Empties the deck
         """
         del self.cards[:]
+        
+    def size(self):
+        return len(self.cards)
     
     def shuffle(self):
         r.shuffle(self.cards)

@@ -5,13 +5,13 @@
 #==============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
-import Deck as Dk
-import Card as Cd
+import deck as Dk
+import card as Cd
 
 VERBOSE = False
 V_VERBOSE = False
 
-limited = False
+limited = True
 num_sims = 10000
 total_kept =[]
 total_mulled = []
@@ -34,7 +34,7 @@ def keep_or_mull(hand):
     
     #count land cards
     for i in range(len(hand)):
-        if hand[i].land == True:
+        if hand[i].is_land == True:
             land_count += 1
             
     if land_count >= 2 and land_count <= 4:
@@ -67,11 +67,11 @@ for land_count in range(deck_length):
     
     for i in range(land_count):
         #fill deck with white land cards
-        deck.add_card(Cd.Card(land=True, manaEachTurn = 'W'))
+        deck.add_card(Cd.Card(is_land=True, manaEachTurn = 'W'))
         
     for i in range(deck_length - land_count):
         #fill deck with generic non-land cards
-        deck.add_card(Cd.Card(land=False))
+        deck.add_card(Cd.Card(is_land=False))
         
     if VERBOSE:
         print('For Land Count ' + land_count + ':')
