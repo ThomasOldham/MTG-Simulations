@@ -35,7 +35,8 @@ def simulation(hand_size = 7, num_turns = 5):
     return ColorlessGoldfish.simulation(d, hand_size = hand_size, num_turns = num_turns)
 
 def kill_turn():
-    """ Runs a simulation and gets the turn when the goldfish is defeated. """
+    """ Runs a simulation and gets the turn when the goldfish is defeated.
+        Returns -1 if goldfish is not defeated within 5 turns."""
     states = simulation()
     goldfish_life = GOLDFISH_STARTING_LIFE
     previous_rats = 0
@@ -90,7 +91,7 @@ def damage_and_num_lands(hand_size, num_turns = 5):
     first_state = states[0]
     lands = 0
     for hand_card in first_state.hand:
-        if card.land:
+        if hand_card.land:
             lands += 1
     return damage, lands
 
