@@ -17,10 +17,8 @@ opp_deck = []
 tron_stopped = np.zeros(5)
 
 """
-This function initializes the deck with given number of mine, plant, tower,
-scours, and surgical
-Total card is 38, because we assume we have 2 cards on hand, 1 scour,
-and 1 surgical
+This function initializes the deck with given number of mine, plant, tower, scours
+Total card is 39, because we assume we have 1 surgical card on hand 
 """
 def init_deck(mine, plant, tower, scours):
     global my_deck, opp_deck
@@ -40,8 +38,10 @@ def init_deck(mine, plant, tower, scours):
     
 
 """
-This function initial a hand with 2 cards scours, and surgical
-Next, it draws 5 cards from deck.
+This function initial a hand with surely a Surgical card
+Then it draws a number of card equal to 6 - num_scours
+Parameter:
+    num_scours - number of Thought Scours to initialize
 """
 def init_hand(num_scours):
     global my_deck, my_hand
@@ -54,7 +54,7 @@ def init_hand(num_scours):
 Run 1k sims
 While loop to draw card until x turns
 Cast scours, and surgical
-Casting cards include taking card from hand and put into graveyard,
+Casting cards include taking card from hand and exile it
 Draw new card, include taking a card from deck, put into hand.
 If there is a MINE or POWER_PLANT or TOWER in grave,
 we can use SURGICAL. Exile a tron piece and all cards with the same name
@@ -63,184 +63,73 @@ Successfully breaking the tron deck.
 """
 
 """   
-0 Scours in hand
+This function run the similation 1000 times
+A while loop to simulate the first 3 turn of the game
+
+The goal here is to see how effective Thought Scours can be against Tron deck
+The opponent's deck have tron pieces, which we will try to destroy.
+Our deck contain non_land and Thought Scours
+
+For every turn, we draw 1 card from our deck. For every Thought Scours played, 
+opponent puts 2 cards in graveyard, and draw a card from its deck.
+
+The second if statement check whether we should use Surgical. Only use Surgical
+when there is any Tron piece in the graveyard.
+
+A Tron piece in the graveyard means the Tron deck is broken.
+
+Parameter:
+    scours - the initial number of scours in hand.
 """
     
-
-
-for i in range(1000):
-    init_deck(4,4,4,4)        #assume we have a surgical in open hand
-    #print(my_deck)
-    #print(len(my_deck))
-    #print(opp_deck)
-    #print(len(opp_deck))
-    init_hand(0)
-    #print(my_hand)
-    #print(len(my_hand))
-    
-    grave = []
-    turn = 1
-    while(turn <= 3):
-        my_hand.append(my_deck.pop(0))
-        if SCOURS in my_hand:
-            my_hand.remove(SCOURS)
-            grave.append(opp_deck.pop(0))
-            grave.append(opp_deck.pop(0))
-            opp_deck.pop(0)
-        if MINE in grave or POWER_PLANT in grave or TOWER in grave:
-            #my_hand.remove(SURGICAL)
-            
-            
-            tron_stopped[0] = tron_stopped[0] + 1
-            break 
-            
-        turn = turn + 1
+def thought_scours(scours):
+    for i in range(1000):
+        #Initialize hands & decks & and grave yard
+        init_deck(4,4,4,4)        
+        #print(my_deck)
+        #print(len(my_deck))
+        #print(opp_deck)
+        #print(len(opp_deck))
+        init_hand(scours)
+        #print(my_hand)
+        #print(len(my_hand)
+        grave = []
         
-    #print(deck)
-    #print(hand)
+        #Simulation
+        turn = 1
+        while(turn <= 3):
+            my_hand.append(my_deck.pop(0))
+            if SCOURS in my_hand:
+                my_hand.remove(SCOURS)
+                grave.append(opp_deck.pop(0))
+                grave.append(opp_deck.pop(0))
+                opp_deck.pop(0)
+            if MINE in grave or POWER_PLANT in grave or TOWER in grave:
+                #my_hand.remove(SURGICAL)
+                
+                
+                tron_stopped[scours] = tron_stopped[scours] + 1
+                break 
+                
+            turn = turn + 1
+            
+        #print(deck)
+        #print(hand)
+
+
+
+thought_scours(0)
+thought_scours(1)
+thought_scours(2)
+thought_scours(3)
+thought_scours(4)
 
 """
-1 Scours in hand
-"""  
-for i in range(1000):
-    init_deck(4,4,4,4)        #assume we have a surgical in open hand
-    #print(my_deck)
-    #print(len(my_deck))
-    #print(opp_deck)
-    #print(len(opp_deck))
-    init_hand(1)
-    #print(my_hand)
-    #print(len(my_hand))
-    
-    grave = []
-    turn = 1
-    while(turn <= 3):
-        my_hand.append(my_deck.pop(0))
-        if SCOURS in my_hand:
-            my_hand.remove(SCOURS)
-            grave.append(opp_deck.pop(0))
-            grave.append(opp_deck.pop(0))
-            opp_deck.pop(0)
-        if MINE in grave or POWER_PLANT in grave or TOWER in grave:
-            #my_hand.remove(SURGICAL)
-            
-            
-            tron_stopped[1] = tron_stopped[1] + 1
-            break 
-            
-        turn = turn + 1
-        
-    #print(deck)
-    #print(hand)
-
-
+Total Runtime: 5 minutes
+This bar graph displays the percentage of succeed in breaking the Tron deck.
+From the graph, there is a huge different between having the Thought Scours in
+opener and without one.
 """
-2 Scours in hand
-"""
-for i in range(1000):
-    init_deck(4,4,4,4)        #assume we have a surgical in open hand
-    #print(my_deck)
-    #print(len(my_deck))
-    #print(opp_deck)
-    #print(len(opp_deck))
-    init_hand(2)
-    #print(my_hand)
-    #print(len(my_hand))
-    
-    grave = []
-    turn = 1
-    while(turn <= 3):
-        my_hand.append(my_deck.pop(0))
-        if SCOURS in my_hand:
-            my_hand.remove(SCOURS)
-            grave.append(opp_deck.pop(0))
-            grave.append(opp_deck.pop(0))
-            opp_deck.pop(0)
-        if MINE in grave or POWER_PLANT in grave or TOWER in grave:
-            #my_hand.remove(SURGICAL)
-            
-            
-            
-            tron_stopped[2] = tron_stopped[2] + 1
-            break
-            
-        turn = turn + 1
-        
-    #print(deck)
-    #print(hand)
-
-
-"""
-3 scours in hand
-"""
-for i in range(1000):
-    init_deck(4,4,4,4)        #assume we have a surgical in open hand
-    #print(my_deck)
-    #print(len(my_deck))
-    #print(opp_deck)
-    #print(len(opp_deck))
-    init_hand(3)
-    #print(my_hand)
-    #print(len(my_hand))
-    
-    grave = []
-    turn = 1
-    while(turn <= 3):
-        my_hand.append(my_deck.pop(0))
-        if SCOURS in my_hand:
-            my_hand.remove(SCOURS)
-            grave.append(opp_deck.pop(0))
-            grave.append(opp_deck.pop(0))
-            opp_deck.pop(0)
-        if MINE in grave or POWER_PLANT in grave or TOWER in grave:
-            #my_hand.remove(SURGICAL)
-            
-            
-            tron_stopped[3] = tron_stopped[3] + 1
-            break 
-            
-        turn = turn + 1
-        
-    #print(deck)
-    #print(hand)
-
-
-"""
-4 scours in hand
-"""
-for i in range(1000):
-    init_deck(4,4,4,4)        #assume we have a surgical in open hand
-    #print(my_deck)
-    #print(len(my_deck))
-    #print(opp_deck)
-    #print(len(opp_deck))
-    init_hand(4)
-    #print(my_hand)
-    #print(len(my_hand))
-    
-    grave = []
-    turn = 1
-    while(turn <= 3):
-        my_hand.append(my_deck.pop(0))
-        if SCOURS in my_hand:
-            my_hand.remove(SCOURS)
-            grave.append(opp_deck.pop(0))
-            grave.append(opp_deck.pop(0))
-            opp_deck.pop(0)
-        if MINE in grave or POWER_PLANT in grave or TOWER in grave:
-            #my_hand.remove(SURGICAL)
-            
-            
-            
-            tron_stopped[4] = tron_stopped[4] + 1
-            break
-            
-        turn = turn + 1
-        
-    #print(deck)
-    #print(hand)
-
-
 print (tron_stopped)
 x = np.arange(5)
 plt.bar(x, tron_stopped)
