@@ -6,8 +6,8 @@ import numpy.ma as M
 import mana
 import warnings
 
-RAT_COLONY = card.Card(land=False, manaCost='1B')
-SWAMP = card.Card(land=True, manaEachTurn='B')
+RAT_COLONY = card.Card(is_land=False, manaCost='1B')
+SWAMP = card.Card(is_land=True, manaEachTurn='B')
 GOLDFISH_STARTING_LIFE = 20
 DEBUG = False
 GOOD_COLOR = (0x00, 0x00, 0xFF)
