@@ -16,10 +16,10 @@ class Card:
     damageFirstTurn = None
     damageEachTurn = None
     
-    def __init__(self, land=False, manaCost='0', manaFirstTurn='0',
+    def __init__(self, is_land=False, manaCost='0', manaFirstTurn='0',
     manaEachTurn='0', pseudoETBT=False, payEachTurn='0', damageFirstTurn=0,
     damageEachTurn=0):
-        self.land = land
+        self.is_land = is_land
         self.manaCost = mana.fromString(manaCost)
         self.manaFirstTurn = mana.fromString(manaFirstTurn)
         self.manaEachTurn = mana.fromString(manaEachTurn)
@@ -31,7 +31,7 @@ class Card:
     def __str__(self):
         delim = '\n'
         ret = ''
-        if self.land:
+        if self.is_land:
             ret = "Land"
         else:
             ret = "Spell"

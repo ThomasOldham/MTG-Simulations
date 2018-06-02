@@ -1,33 +1,48 @@
+# Class representing a deck in Magic the Gathering
 import numpy.random as r
 
 class Deck:
-    """ Represents a deck of cards, but you can put any data type in.
-        You can build a deck using either the add_card_to_top and
-        add_card_to_bottom methods or by directly manipulating the "cards"
-        attribute.
-    """
-    
     cards = None
     
     def __init__(self):
         self.cards = []
     
+    def draw_hand(self, num = 7):
+        """ Draws and returns the top 7 cards in the deck. Cards are removed 
+        from the deck
+        """
+        hand = []
+        for i in range(num):
+            hand.append(self.draw())
+        return hand
+        
+    def peep(self,num = 7):
+        """ Looks at the first 'num' cards at the top of the deck. The cards are 
+        not removed from the deck
+        """
+        return self.cards[-num:]
+        
     def draw(self):
-        """ Removes and returns the top card. """
+        """ Draws a single card from the top of the deck
+        """
         return self.cards.pop()
     
     def take_bottom_card(self):
-        """ Removes and returns the bottom card. """
         return self.cards.pop(0)
     
-    def add_card_to_top(self, card):
-        """ Adds a card to the top of the deck. """
+    def add_card(self, card):
         self.cards.append(card)
     
     def add_card_to_bottom(self, card):
-        """ Adds a card to the bottom of the deck."""
         self.cards.insert(0, card)
+        
+    def clear(self):
+        """ Empties the deck
+        """
+        del self.cards[:]
+        
+    def size(self):
+        return len(self.cards)
     
     def shuffle(self):
-        """ Randomly reorders the cards in the deck. """
         r.shuffle(self.cards)
