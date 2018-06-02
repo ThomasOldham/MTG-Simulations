@@ -20,9 +20,9 @@ def rats_deck():
     """ Constructs and returns a deck with 40 Rat Colonies and 20 Swamps """
     rats_deck = deck.Deck()
     for i in range(40):
-        rats_deck.add_card_to_top(RAT_COLONY)
+        rats_deck.add_card(RAT_COLONY)
     for i in range(20):
-        rats_deck.add_card_to_top(SWAMP)
+        rats_deck.add_card(SWAMP)
     rats_deck.shuffle()
     return rats_deck
 
@@ -44,7 +44,7 @@ def kill_turn():
         state = states[i]
         rats = 0
         for permanent in state.board:
-            if not permanent.land:
+            if not permanent.is_land:
                 rats += 1
         goldfish_life -= (rats + 1) * previous_rats
         if goldfish_life <= 0:
@@ -64,12 +64,12 @@ def mana_efficiency_and_num_lands(hand_size, num_turns = 5):
     lands = 0
     first_state = states[0]
     for hand_card in first_state.hand:
-        if hand_card.land:
+        if hand_card.is_land:
             lands += 1
     if DEBUG:
         out = ""
         for hand_card in first_state.hand:
-            out += " " + str(hand_card.land)
+            out += " " + str(hand_card.is_land)
         print(out, lands)
     return mana_count, lands
 
@@ -84,14 +84,14 @@ def damage_and_num_lands(hand_size, num_turns = 5):
     for state in states:
         rats = 0
         for permanent in state.board:
-            if not permanent.land:
+            if not permanent.is_land:
                 rats += 1
         damage += previous_rats * (rats + 2)
         previous_rats = rats
     first_state = states[0]
     lands = 0
     for hand_card in first_state.hand:
-        if hand_card.land:
+        if hand_card.is_land:
             lands += 1
     return damage, lands
 
