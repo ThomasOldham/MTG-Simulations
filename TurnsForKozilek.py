@@ -14,8 +14,8 @@ def edhrec_deck():
         EDHRec as of May 27, 2018.
     """
     
-    one_mana_land = Card(land = True, manaEachTurn = '1')
-    two_mana_land = Card(land = True, manaEachTurn = '2')
+    one_mana_land = Card(is_land = True, manaEachTurn = '1')
+    two_mana_land = Card(is_land = True, manaEachTurn = '2')
     cards = [
     Card(manaCost = '9'), # Artisan of Kozilek
     Card(manaCost = '7'), # Bane of Bala Ged
@@ -78,12 +78,12 @@ def edhrec_deck():
     Card(manaCost = '1', manaEachTurn = '1'), # Voltaic Key, assuming it untaps a mid-range mana rock, as a compromise between early-game and mid-to-late-game characteristics
     Card(manaCost = '3', manaEachTurn = '2', pseudoETBT = True), # Worn Powerstone
     Card(manaCost = '8'), # Ugin, the Spirit Dragon
-    Card (land = True, manaEachTurn = '2') # Eye of Ugin, assuming one Eldrazi per turn
+    Card (is_land = True, manaEachTurn = '2') # Eye of Ugin, assuming one Eldrazi per turn
     ]
     cards += [two_mana_land] * 2 + [one_mana_land] * 34
     ret = Deck()
     for card in cards:
-        ret.add_card_to_top(card)
+        ret.add_card(card)
     return ret
 
 def simulation(deck, hand_size = 7, num_turns = 5):
@@ -98,7 +98,7 @@ def starting_lands_and_mana_available(deck, hand_size = 7, turns = 5):
     states = simulation(deck, hand_size = hand_size, num_turns = turns)
     lands = 0
     for card in states[0].hand:
-        if card.land:
+        if card.is_land:
             lands += 1
     mana_count = 0
     for card in states[-1].board:
